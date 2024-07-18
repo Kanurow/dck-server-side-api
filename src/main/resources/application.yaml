@@ -19,11 +19,13 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
 
+
 app:
   jwtSecret: 6B58703273357638792F423F4428472B4B6250655368566D597133743677397A244326462948404D635166546A576E5A7234753778214125442A472D4B614E64
   jwtExpirationInMs: 604800000
   cors:
-    allowedOrigins: http://localhost:3000
+    allowedOrigins: "*"
+  max-cell-size: 3
 
 management:
   endpoints:
@@ -60,6 +62,7 @@ app:
   jwtExpirationInMs: 604800000
   cors:
     allowedOrigins: "*"
+  max-cell-size: 3
 server:
   port: 8080
   tomcat:
