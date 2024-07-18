@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @Builder
@@ -64,15 +65,14 @@ public class User extends DateAudit {
     private String profileImageUrl;
     private Double walletBalance;
 
+    @Lazy
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name = "cell_unit")
-    private CellUnit cellUnit;
+    private Long cellUnitId;
 
     public User(String firstName, String lastName, LocalDate dateOfBirth,
                 String email, String phoneNumber, String branchChurch,Gender gender, String password) {
@@ -96,5 +96,19 @@ public class User extends DateAudit {
                 ", email='" + email + '\'' +
                 ", dateOfBirth='" + dateOfBirth + '\'' +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(phoneNumber, user.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, phoneNumber);
     }
 }

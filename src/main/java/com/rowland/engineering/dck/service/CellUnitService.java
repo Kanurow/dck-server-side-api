@@ -10,8 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +21,7 @@ public class CellUnitService implements ICellUnitService {
 
 
     @Value("${app.max-cell-size}")
-    private byte MAX_CELL_MEMBERS;
+    private int MAX_CELL_MEMBERS;
 
     @Override
     public List<CellUnit> getAllCellUnits() {
@@ -30,15 +30,16 @@ public class CellUnitService implements ICellUnitService {
 
     @Override
     public void addCellMember(long cellUnitId, long userId) {
-            CellUnit cellUnit = cellUnitRepository.findById(cellUnitId).orElseThrow(() -> new EntityNotFoundException("CellUnit not found"));
-            User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-            if (cellUnit.getCellMembers().size() >= MAX_CELL_MEMBERS) {
-                throw new IllegalStateException("Cell unit is full! 30 maximum members in a cell.");
-            }
-            cellUnit.getCellMembers().add(user);
-            user.setCellUnit(cellUnit);
-            userRepository.save(user);
-            cellUnitRepository.save(cellUnit);
+        CellUnit cellUnit = cellUnitRepository.findById(cellUnitId).orElseThrow(() -> new EntityNotFoundException("CellUnit not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        if (cellUnit.getMembers().size() >= MAX_CELL_MEMBERS) {
+            throw new IllegalStateException("Cell unit is full! 30 maximum members in a cell.");
+        }
+        cellUnit.getMembers().add(user);
+        user.setCellUnitId(cellUnit.getId());
+        userRepository.save(user);
+        cellUnitRepository.save(cellUnit);
+
     }
     @Override
     public void removeCellMember(long cellUnitId, long userId) {
@@ -47,11 +48,13 @@ public class CellUnitService implements ICellUnitService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        boolean removed = cellUnit.getCellMembers().remove(user);
+        boolean removed = cellUnit.getMembers().remove(user);
         if (!removed) {
             throw new IllegalArgumentException("User not found in cell unit");
         }
+        user.setCellUnitId(null);
         cellUnitRepository.save(cellUnit);
+        userRepository.save(user);
     }
 
 
@@ -62,12 +65,12 @@ public class CellUnitService implements ICellUnitService {
                 .orElseThrow(() -> new EntityNotFoundException("Cell leader not found"));
 
         CellUnit cellUnit = CellUnit.builder()
-                .cellName(cellUnitDto.getCellName())
-                .cellLongitude(cellUnitDto.getCellLongitude())
-                .cellLatitude(cellUnitDto.getCellLatitude())
-                .cellLeaderId(cellLeader.getId())
-                .cellAddress(cellUnitDto.getCellAddress())
-                .cellLeadersPhoneNumber(cellLeader.getPhoneNumber())
+                .name(cellUnitDto.getCellName())
+                .longitude(cellUnitDto.getCellLongitude())
+                .latitude(cellUnitDto.getCellLatitude())
+                .leaderId(cellLeader.getId())
+                .address(cellUnitDto.getCellAddress())
+                .leadersPhoneNumber(cellLeader.getPhoneNumber())
                 .build();
         cellUnitRepository.save(cellUnit);
     }

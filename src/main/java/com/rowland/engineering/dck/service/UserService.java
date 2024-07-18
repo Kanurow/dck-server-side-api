@@ -60,9 +60,10 @@ public class UserService implements IUserService{
         CellUnit foundCellUnit = cellUnitRepository.findById(cellUnitId).orElseThrow(() -> new EntityNotFoundException("Cell unit not found"));
 
         foundUser.setCellLeader(true);
-        foundCellUnit.setCellLeaderId(foundUser.getId());
+        foundCellUnit.setLeaderId(foundUser.getId());
 
         userRepository.save(foundUser);
+
         cellUnitRepository.save(foundCellUnit);
         return ResponseEntity.status(HttpStatus.OK).body(foundUser.getFirstName() + " is now a cell leader");
     }

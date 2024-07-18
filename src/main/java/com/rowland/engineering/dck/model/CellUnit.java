@@ -2,18 +2,19 @@ package com.rowland.engineering.dck.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Data
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
 @Entity
 @AllArgsConstructor
 public class CellUnit {
@@ -24,17 +25,34 @@ public class CellUnit {
 
     @NaturalId
     @NotBlank
-    private String cellName;
-    private String cellLongitude;
-    private String cellLatitude;
+    private String name;
+    private String longitude;
+    private String latitude;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "cell_units_table",
             joinColumns = @JoinColumn(name = "cell_unit_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> cellMembers = new HashSet<>();
+    private Set<User> members = new HashSet<>();
 
-    private Long cellLeaderId;
-    private String cellLeadersPhoneNumber;
-    private String cellAddress;
+    private Long leaderId;
+    private String leadersPhoneNumber;
+    private String address;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, longitude, latitude);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CellUnit cellUnit = (CellUnit) o;
+        return Objects.equals(id, cellUnit.id) &&
+                Objects.equals(name, cellUnit.name) &&
+                Objects.equals(longitude, cellUnit.longitude) &&
+                Objects.equals(latitude, cellUnit.latitude);
+    }
 }
