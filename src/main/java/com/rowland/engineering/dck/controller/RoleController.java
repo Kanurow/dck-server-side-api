@@ -55,8 +55,8 @@ public class RoleController {
     }
 
     @Operation(
-            description = "Gets all roles",
-            summary = "Gets all roles"
+            description = "Removes all users from a given role",
+            summary = "Removes all users from a given role"
     )
     @PostMapping("/remove-all-users-from-role/{roleId}")
     public Role removeAllUsersFromRole(@PathVariable("roleId") Long roleId){
@@ -64,8 +64,8 @@ public class RoleController {
     }
 
     @Operation(
-            description = "Gets all roles",
-            summary = "Gets all roles"
+            description = "Removes a user from role",
+            summary = "Removes a user from role"
     )
     @DeleteMapping("/remove-user-from-role")
     public User removeUserFromRole(
@@ -75,8 +75,8 @@ public class RoleController {
     }
 
     @Operation(
-            description = "Gets all roles",
-            summary = "Gets all roles"
+            description = "Assigns role to user for authorization purposes",
+            summary = "Assigns role to a user"
     )
     @PostMapping("/assign-user-to-role")
     public User assignUserToRole(

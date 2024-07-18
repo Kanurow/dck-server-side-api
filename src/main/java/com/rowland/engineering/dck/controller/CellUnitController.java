@@ -35,7 +35,7 @@ public class CellUnitController {
     }
 
     @Operation(
-            description = "Adds a member to a cell unit",
+            description = "Adds a member to a cell unit by accepting cell unit id and users id",
             summary = "Adds a user to a cell unit"
     )
     @PostMapping("/add-cell-member/{cellUnitId}/{userId}")
