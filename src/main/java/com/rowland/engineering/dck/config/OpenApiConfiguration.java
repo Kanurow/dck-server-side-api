@@ -22,11 +22,11 @@ import io.swagger.v3.oas.annotations.servers.Server;
         servers = {
                 @Server(
                         description = "Local Development Environment",
-                        url = "https://dck-web-application.onrender.com"
+                        url = "https://dck-server-side-api.onrender.com"
                 ),
                 @Server(
                         description = "Production Environment",
-                        url = "https://dck-web-application.onrender.com"
+                        url = "https://dck-server-side-api.onrender.com"
                 )
         },
         security = {
