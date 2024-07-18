@@ -1,0 +1,130 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+server:
+  port: 9090
+  application:
+    name: DCK
+
+  datasource:
+    username: sa
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+app:
+  jwtSecret: 6B58703273357638792F423F4428472B4B6250655368566D597133743677397A244326462948404D635166546A576E5A7234753778214125442A472D4B614E64
+  jwtExpirationInMs: 604800000
+  cors:
+    allowedOrigins: http://localhost:3000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+info:
+  app:
+    description: This is a banking web application (Row Bank)
+    version: 1.0.0
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  application:
+    name: dck
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://dpg-cqainueehbks73b23dj0-a/dck_8hua
+    username: dck_8hua_user
+    password: OJqyFaZQZbImQVzAVOZkX3WVvt2ZHS5t
+
+app:
+  jwtSecret: 6B58703273357638792F423F4428472B4B6250655368566D597133743677397A244326462948404D635166546A576E5A7234753778214125442A472D4B614E64
+  jwtExpirationInMs: 604800000
+  cors:
+    allowedOrigins: "*"
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+info:
+  app:
+    description: This is a church web application
+    version: 1.0.0
+
+---
+server:
+  port: 8080
+spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: DCK
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dck
+    username: root
+    password: 10850106Row
+    initialization-mode: always
+  #    schema: classpath:schema.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+app:
+  jwtSecret: 6B58703273357638792F423F4428472B4B6250655368566D597133743677397A244326462948404D635166546A576E5A7234753778214125442A472D4B614E64
+  jwtExpirationInMs: 604800000
+  cors:
+    allowedOrigins: "*"
+  max-cell-size: 3
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+info:
+  app:
+    description: This is a church web application (Dominion City Kubwa)
+    version: 1.0.0
+jwt:
+  header: AuthHeader
+  key: e038394bc945eed83ca8797aae26fddfae91b175fc4dd26339dd6cb8066c65b892d6ac07c0a3c0384601896ade90551905460af66e4864e9c71a31d6d523c136
+  expiration: 36000
