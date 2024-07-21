@@ -1,12 +1,15 @@
 package com.rowland.engineering.dck.dto;
 
 import com.rowland.engineering.dck.model.Gender;
+import com.rowland.engineering.dck.model.Role;
+import com.rowland.engineering.dck.model.RoleName;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -39,7 +42,6 @@ public class RegisterRequest {
     @Size(min = 4)
     private String password;
 
-    @NotBlank(message ="Password must not be blank")
-    @Size(min = 4)
-    private String confirmPassword;
+    private String roleName;
+
 }

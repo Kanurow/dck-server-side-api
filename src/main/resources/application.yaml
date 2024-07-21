@@ -1,40 +1,16 @@
 spring:
   config:
+    import: optional:secret.yaml
     activate:
       on-profile: test
-server:
-  port: 8080
+
   application:
     name: DCK
-
-  datasource:
-    username: sa
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    password: password
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
 
-
-app:
-  jwtSecret: 6B58703273357638792F423F4428472B4B6250655368566D597133743677397A244326462948404D635166546A576E5A7234753778214125442A472D4B614E64
-  jwtExpirationInMs: 604800000
-  cors:
-    allowedOrigins: "*"
-  max-cell-size: 3
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always
 info:
   app:
     description: This is a banking web application (Row Bank)
@@ -44,6 +20,7 @@ info:
 
 spring:
   config:
+    import: secret.yaml
     activate:
       on-profile: prod
   application:
@@ -86,6 +63,7 @@ server:
   port: 8080
 spring:
   config:
+    import: secret.yaml
     activate:
       on-profile: dev
   application:

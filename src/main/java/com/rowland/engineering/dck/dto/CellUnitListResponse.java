@@ -13,6 +13,7 @@ import org.hibernate.annotations.NaturalId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Data
@@ -22,7 +23,7 @@ public class CellUnitListResponse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @NaturalId
     @NotBlank

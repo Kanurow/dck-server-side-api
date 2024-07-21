@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @CrossOrigin("*")
 @RestController
@@ -40,8 +43,8 @@ public class CellUnitController {
     )
     @PostMapping("/add-cell-member/{cellUnitId}/{userId}")
     public ResponseEntity<String> addCellMember(
-            @PathVariable long cellUnitId,
-            @PathVariable long userId) {
+            @PathVariable UUID cellUnitId,
+            @PathVariable UUID userId) {
         try{
             cellService.addCellMember(cellUnitId, userId);
             return ResponseEntity.ok("New member added successfully!");
@@ -51,13 +54,13 @@ public class CellUnitController {
     }
 
     @Operation(
-            description = "Removes a cell member from cell",
+            description = "Removes a cell member from cell unit",
             summary = "Removes a cell member from cell"
     )
     @DeleteMapping("/remove-cell-member/{cellUnitId}/{userId}")
     public ResponseEntity<String> removeCellMember(
-            @PathVariable long cellUnitId,
-            @PathVariable long userId) {
+            @PathVariable UUID cellUnitId,
+            @PathVariable UUID userId) {
         try{
             cellService.removeCellMember(cellUnitId, userId);
             return ResponseEntity.ok("Removed successfully!");
@@ -80,5 +83,17 @@ public class CellUnitController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(re.getMessage());
         }
     }
+
+    @Operation(
+            description = "Allows upload of csv file to cell unit table through a csv file",
+            summary = "Allows cell unit csv data upload"
+    )
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
+    public ResponseEntity<String> uploadCellUnitCoOrdinates(
+            @RequestPart("file") MultipartFile file
+    ) throws IOException {
+       return ResponseEntity.ok(cellService.uploadCellUnitCoOrdinates(file));
+    }
+
 
 }

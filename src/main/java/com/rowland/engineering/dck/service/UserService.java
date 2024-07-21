@@ -7,6 +7,7 @@ import com.rowland.engineering.dck.model.CellUnit;
 import com.rowland.engineering.dck.model.User;
 import com.rowland.engineering.dck.repository.CellUnitRepository;
 import com.rowland.engineering.dck.repository.UserRepository;
+import com.rowland.engineering.dck.security.UserPrincipal;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +32,15 @@ public class UserService implements IUserService{
     }
 
 
-    public Optional<User> findUserById(Long id) {
+    public Optional<User> findUserById(UUID id) {
         return userRepository.findById(id);
     }
 
     @Transactional
     @Override
-    public ResponseEntity<String> updateUserInformation(UpdateUserInformation updateUserInformation) {
+    public ResponseEntity<String> updateUserInformation(UpdateUserInformation updateUserInformation, UserPrincipal currentUser) {
         try {
-            User foundUser = userRepository.findById(updateUserInformation.getUserId()).orElseThrow(() -> new UserNotFoundException("User does not exist"));
+            User foundUser = userRepository.findById(currentUser.getId()).orElseThrow(() -> new UserNotFoundException("User does not exist"));
             foundUser.setFirstName(updateUserInformation.getFirstName());
             foundUser.setLastName(updateUserInformation.getLastName());
             foundUser.setBranchChurch(updateUserInformation.getBranchChurch());
@@ -55,7 +57,7 @@ public class UserService implements IUserService{
 
     @Override
     @Transactional
-    public ResponseEntity<String> makeCellLeader(Long userId, Long cellUnitId) {
+    public ResponseEntity<String> makeCellLeader(UUID userId, UUID cellUnitId) {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found"));
         CellUnit foundCellUnit = cellUnitRepository.findById(cellUnitId).orElseThrow(() -> new EntityNotFoundException("Cell unit not found"));
 

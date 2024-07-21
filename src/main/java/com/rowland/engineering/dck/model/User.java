@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -27,8 +28,8 @@ import java.util.Set;
 })
 public class User extends DateAudit {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     @NotBlank
     @Size(min = 2,max = 25)
     private String firstName;
@@ -65,14 +66,14 @@ public class User extends DateAudit {
     private String profileImageUrl;
     private Double walletBalance;
 
-    @Lazy
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    private Long cellUnitId;
+
+    private UUID cellUnitId;
 
     public User(String firstName, String lastName, LocalDate dateOfBirth,
                 String email, String phoneNumber, String branchChurch,Gender gender, String password) {

@@ -19,16 +19,13 @@ import java.util.UUID;
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-//
-//    @Id
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(name = "UUID")
-//    @Column(name = "id", nullable = false, updatable = false, unique = true)
-//    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @NaturalId
+    @Column(length = 60)
+    private RoleName name;
 
 
     @JsonIgnore
@@ -36,28 +33,9 @@ public class Role {
     private Collection<User> users = new HashSet<>();
 
 
-    public Role(String name) {
+    public Role(RoleName name) {
         this.name = name;
     }
 
-    public void assignRoleToUser(User user){
-        user.getRoles().add(this);
-        this.getUsers().add(user);
-    }
 
-    public void removeUserFromRole(User user){
-        user.getRoles().remove(this);
-        this.getUsers().remove(user);
-
-    }
-
-    public void removeAllUsersFromRole(){
-        if (this.getUsers() != null){
-            List<User> roleUsers = this.getUsers().stream().toList();
-            roleUsers.forEach(this :: removeUserFromRole);
-        }
-    }
-    public  String getName(){
-        return name != null? name : "";
-    }
 }

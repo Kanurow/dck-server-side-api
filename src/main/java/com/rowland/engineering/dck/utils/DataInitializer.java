@@ -1,30 +1,28 @@
 package com.rowland.engineering.dck.utils;
 
 import com.rowland.engineering.dck.exception.AppException;
-import com.rowland.engineering.dck.model.Gender;
-import com.rowland.engineering.dck.model.Role;
-import com.rowland.engineering.dck.model.RoleName;
-import com.rowland.engineering.dck.model.User;
+import com.rowland.engineering.dck.model.*;
+import com.rowland.engineering.dck.repository.CellUnitRepository;
 import com.rowland.engineering.dck.repository.RoleRepository;
 import com.rowland.engineering.dck.repository.UserRepository;
+import lombok.Locked;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
-import static com.rowland.engineering.dck.model.RoleName.*;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
+    private final CellUnitRepository cellUnitRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -32,14 +30,14 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<Role> roles = Arrays.asList(
-                new Role("ROLE_MEMBER"),
-                new Role("ROLE_PASTOR"),
-                new Role("ROLE_WORKER"),
-                new Role("ROLE_CELL_LEADER"),
-                new Role("ROLE_ADMIN")
+                new Role(RoleName.ROLE_MEMBER),
+                new Role(RoleName.ROLE_ADMIN__USER),
+                new Role(RoleName.ROLE_PASTOR),
+                new Role(RoleName.ROLE_CELL_LEADER),
+                new Role(RoleName.ROLE_WORKER)
         );
-        roleRepository.saveAll(roles);
-        persistUsers();
+        List<Role> roles1 = roleRepository.saveAll(roles);
+        //        persistUsers();
     }
 
     private void persistUsers() {
@@ -50,7 +48,7 @@ public class DataInitializer implements CommandLineRunner {
                 .orElseThrow(() -> new AppException("Admin Role not set."));
 
         User user1 = User.builder()
-                .id(1L)
+                .id(UUID.randomUUID())
                 .firstName("Rowland")
                 .lastName("Kanu")
                 .gender(Gender.MALE)
@@ -63,12 +61,12 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
         User user2 = User.builder()
-                .id(2L)
+                .id(UUID.randomUUID())
                 .firstName("Juliet")
                 .lastName("Kanu")
                 .gender(Gender.FEMALE)
                 .dateOfBirth(LocalDate.of(1999, 4,15))
-                .email("kanujul12@gmail.com")
+                .email("kanujuliet@gmail.com")
                 .branchChurch("Utako")
                 .phoneNumber("012345678")
                 .password(passwordEncoder.encode("flames"))

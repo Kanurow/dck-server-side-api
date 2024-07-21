@@ -5,5 +5,5 @@ public enum RoleName {
     ROLE_WORKER,
     ROLE_CELL_LEADER,
     ROLE_PASTOR,
-    ROLE_ADMIN
+    ROLE_ADMIN__USER
 }

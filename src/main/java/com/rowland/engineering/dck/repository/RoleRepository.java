@@ -9,9 +9,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, UUID> {
 
     Optional<Role> findByName(String roleName);
+    Role findByName(RoleName roleName);
 
     boolean existsByName(String roleName);
 }

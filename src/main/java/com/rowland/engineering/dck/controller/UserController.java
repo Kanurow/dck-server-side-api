@@ -13,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin("*")
 @RestController
@@ -31,7 +31,7 @@ public class UserController {
             summary = "Gets summary data of actively logged in user"
     )
     @GetMapping("/user/me")
-    public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+    public UserSummary getCurrentUser(@Valid  @CurrentUser UserPrincipal currentUser) {
         return new UserSummary(currentUser.getId(), currentUser.getFirstName(), currentUser.getLastName(),
                 currentUser.getPhoneNumber(), currentUser.getEmail());
     }
@@ -40,19 +40,17 @@ public class UserController {
             description = "Get user by Id",
             summary = "Returns user by providing user id"
     )
-    @GetMapping("/user/{id}")
-    public Optional<User> getUserById(@PathVariable(value = "id") Long id) {
-
+    @GetMapping("/user/{userId}")
+    public Optional<User> getUserById(@PathVariable(value = "userId") UUID id) {
         return userService.findUserById(id);
     }
 
-
+//    @PreAuthorize("hasRole('ROLE_PASTOR') or hasRole('ROLE_ADMIN__USER')")
     @Operation(
             description = "Get all registered users - user must be an admin or pastor",
             summary = "Returns all registered users - must be logged in as admin"
     )
     @GetMapping("/all-users")
-    @PreAuthorize("hasRole('ROLE_PASTOR') or hasRole('ROLE_ADMIN')")
     public List<User> getUsers(){
         return userService.getAllUsers();
     }
@@ -62,8 +60,10 @@ public class UserController {
             summary = "Enables user update profile information"
     )
     @PatchMapping("/update-user-information")
-    public ResponseEntity<String> updateUserInformation(@RequestBody UpdateUserInformation userInformation) throws IOException {
-        return userService.updateUserInformation(userInformation);
+    public ResponseEntity<String> updateUserInformation(
+            @Valid @RequestBody UpdateUserInformation userInformation,
+            @CurrentUser UserPrincipal currentUser) throws IOException {
+        return userService.updateUserInformation(userInformation, currentUser);
 
     }
 
@@ -73,9 +73,9 @@ public class UserController {
             summary = "Gives the role of a cell leader - must be logged in as admin or pastor"
     )
     @PatchMapping("/make-cell-leader/{userId}/{cellUnitId}")
-    @PreAuthorize("hasRole('ROLE_PASTOR') or hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> makeCellLeader(@PathVariable(value = "userId") Long userId,
-                                                 @PathVariable Long cellUnitId){
+    @PreAuthorize("hasRole('ROLE_ADMIN__USER')")
+    public ResponseEntity<String> makeCellLeader(@PathVariable(value = "userId") UUID userId,
+                                                 @PathVariable UUID cellUnitId){
         return userService.makeCellLeader(userId, cellUnitId);
     }
 

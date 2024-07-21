@@ -14,13 +14,14 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
 @Data
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails, Principal {
-    private Long id;
+    private UUID id;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
@@ -35,7 +36,7 @@ public class UserPrincipal implements UserDetails, Principal {
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
-    public UserPrincipal(Long id, String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, Gender gender, String email,
+    public UserPrincipal(UUID id, String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, Gender gender, String email,
                          String password, String branchChurch, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
@@ -48,14 +49,14 @@ public class UserPrincipal implements UserDetails, Principal {
         this.branchChurch = branchChurch;
         this.authorities = authorities;
     }
-    public UserPrincipal(long id) {
+    public UserPrincipal(UUID id) {
         this.id = id;
     }
 
 
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
-                new SimpleGrantedAuthority(role.getName())
+                new SimpleGrantedAuthority(role.getName().name())
         ).collect(Collectors.toList());
 
         return new UserPrincipal(

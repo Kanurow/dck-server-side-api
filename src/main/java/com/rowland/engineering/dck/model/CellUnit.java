@@ -1,5 +1,6 @@
 package com.rowland.engineering.dck.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.NaturalId;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Builder
@@ -20,12 +22,13 @@ import java.util.Set;
 public class CellUnit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NaturalId
     @NotBlank
     private String name;
+
     private String longitude;
     private String latitude;
 
@@ -35,7 +38,7 @@ public class CellUnit {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> members = new HashSet<>();
 
-    private Long leaderId;
+    private UUID leaderId;
     private String leadersPhoneNumber;
     private String address;
 
