@@ -64,55 +64,5 @@ public class DataInitializer implements CommandLineRunner {
 
         );
         branchChurchRepository.saveAll(branchChurches);
-//                persistUsers();
-    }
-
-    private void persistUsers() {
-
-        Role roleMember = roleRepository.findByName("ROLE_MEMBER")
-                .orElseThrow(() -> new AppException("User Role not set."));
-        Role roleAdmin = roleRepository.findByName("ROLE_ADMIN")
-                .orElseThrow(() -> new AppException("Admin Role not set."));
-        Department technicalDepartment = departmentRepository.findByDepartmentName("TECHNICAL")
-                .orElseThrow(() -> new AppException("Technical department not set."));
-        Department mediaDepartment = departmentRepository.findByDepartmentName("MEDIA")
-                .orElseThrow(() -> new AppException("Media department not set."));
-
-        BranchChurch branchChurch = branchChurchRepository.findByBranchName("FO1")
-                .orElseThrow(() -> new AppException("Branch church not set."));
-
-        User user1 = User.builder()
-                .id(UUID.randomUUID())
-                .firstName("Rowland")
-                .lastName("Kanu")
-                .gender(Gender.MALE)
-                .dateOfBirth(LocalDate.of(2007, 11,20))
-                .email("kanurowland92@gmail.com")
-                .phoneNumber("08143358911")
-                .favouriteBiblePassage("John 16:33 - For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.")
-                .password(passwordEncoder.encode("flames"))
-                .build();
-
-        User user2 = User.builder()
-                .id(UUID.randomUUID())
-                .firstName("Juliet")
-                .lastName("Kanu")
-                .gender(Gender.FEMALE)
-                .dateOfBirth(LocalDate.of(1999, 4,15))
-                .email("kanujuliet@gmail.com")
-                .phoneNumber("012345678")
-                .password(passwordEncoder.encode("flames"))
-                .build();
-
-        user1.setRoles(new HashSet<>(List.of(roleMember, roleAdmin)));
-        user1.setBranchChurch(new HashSet<>(List.of(branchChurch)));
-        user1.setDepartment(new HashSet<>(List.of(technicalDepartment)));
-
-        user2.setRoles(new HashSet<>(List.of(roleMember, roleAdmin)));
-        user2.setBranchChurch(new HashSet<>(List.of(branchChurch)));
-        user2.setDepartment(new HashSet<>(List.of(technicalDepartment, mediaDepartment)));
-
-        userRepository.saveAll(List.of(
-                user1, user2));
     }
 }
