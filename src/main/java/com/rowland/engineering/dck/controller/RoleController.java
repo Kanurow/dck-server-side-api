@@ -1,6 +1,7 @@
 package com.rowland.engineering.dck.controller;
 
 
+import com.rowland.engineering.dck.dto.RoleResponse;
 import com.rowland.engineering.dck.model.Role;
 import com.rowland.engineering.dck.service.IRoleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +26,7 @@ public class RoleController {
             summary = "Gets all roles"
     )
     @GetMapping("/all-roles")
-    public ResponseEntity<List<Role>> getAllRoles(){
+    public ResponseEntity<List<RoleResponse>> getAllRoles(){
         return new ResponseEntity<>(roleService.getRoles(), FOUND);
     }
 

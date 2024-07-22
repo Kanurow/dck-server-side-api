@@ -37,7 +37,7 @@ public class UserPrincipal implements UserDetails, Principal {
 
     private Collection<? extends GrantedAuthority> authorities;
     public UserPrincipal(UUID id, String firstName, String lastName, String phoneNumber, LocalDate dateOfBirth, Gender gender, String email,
-                         String password, String branchChurch, Collection<? extends GrantedAuthority> authorities) {
+                         String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,7 +46,6 @@ public class UserPrincipal implements UserDetails, Principal {
         this.gender = gender;
         this.email = email;
         this.password = password;
-        this.branchChurch = branchChurch;
         this.authorities = authorities;
     }
     public UserPrincipal(UUID id) {
@@ -68,7 +67,6 @@ public class UserPrincipal implements UserDetails, Principal {
                 user.getGender(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getBranchChurch(),
                 authorities
         );
     }

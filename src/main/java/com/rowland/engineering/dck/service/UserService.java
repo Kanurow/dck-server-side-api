@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -43,7 +44,6 @@ public class UserService implements IUserService{
             User foundUser = userRepository.findById(currentUser.getId()).orElseThrow(() -> new UserNotFoundException("User does not exist"));
             foundUser.setFirstName(updateUserInformation.getFirstName());
             foundUser.setLastName(updateUserInformation.getLastName());
-            foundUser.setBranchChurch(updateUserInformation.getBranchChurch());
             foundUser.setGender(updateUserInformation.getGender());
             foundUser.setAlternativePhoneNumber(updateUserInformation.getAlternativePhoneNumber());
             foundUser.setDateOfBirth(updateUserInformation.getDateOfBirth());

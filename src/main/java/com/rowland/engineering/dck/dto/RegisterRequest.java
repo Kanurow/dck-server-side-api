@@ -32,8 +32,6 @@ public class RegisterRequest {
     @Size(min = 2,max = 40 , message = "Last name should be between two characters and forty characters")
     private String phoneNumber;
 
-    @NotBlank
-    private String branchChurch;
 
     @Email(message = "Enter a valid email")
     private String email;
@@ -43,5 +41,8 @@ public class RegisterRequest {
     private String password;
 
     private String roleName;
+    @NotBlank
+    private String branchChurch;
+    private String department;
 
 }

@@ -10,7 +10,6 @@ public class UpdateUserInformation {
     private String lastName;
     private String alternativePhoneNumber;
     private Gender gender;
-    private String branchChurch;
     private LocalDate dateOfBirth;
     private String favouriteBiblePassage;
 }

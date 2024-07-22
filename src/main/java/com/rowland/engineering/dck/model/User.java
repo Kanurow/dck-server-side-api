@@ -40,8 +40,6 @@ public class User extends DateAudit {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @NotBlank
-    private String branchChurch;
 
     @PastOrPresent(message = "Date of birth cannot be in future")
     @Temporal(TemporalType.DATE)
@@ -72,17 +70,28 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "church_branch",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "branch_church_id"))
+    @Column(name = "branchChurch")
+    private Set<BranchChurch> branchChurch = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "department",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "department_id"))
+    private Set<Department> department = new HashSet<>();
 
     private UUID cellUnitId;
 
     public User(String firstName, String lastName, LocalDate dateOfBirth,
-                String email, String phoneNumber, String branchChurch,Gender gender, String password) {
+                String email, String phoneNumber, Gender gender, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.branchChurch = branchChurch;
         this.gender = gender;
         this.password = password;
     }
