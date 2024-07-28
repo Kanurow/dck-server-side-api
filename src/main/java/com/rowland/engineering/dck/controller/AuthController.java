@@ -5,7 +5,6 @@ import com.rowland.engineering.dck.dto.JwtAuthenticationResponse;
 import com.rowland.engineering.dck.dto.LoginRequest;
 import com.rowland.engineering.dck.dto.RegisterRequest;
 
-import com.rowland.engineering.dck.exception.AppException;
 import com.rowland.engineering.dck.model.*;
 import com.rowland.engineering.dck.repository.*;
 import com.rowland.engineering.dck.security.JwtTokenProvider;
@@ -28,7 +27,6 @@ import java.net.URI;
 import java.util.Collections;
 
 
-
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -42,7 +40,6 @@ public class AuthController {
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
     private final BranchChurchRepository branchChurchRepository;
-    private final CellUnitRepository cellUnitRepository;
 
 
     private final PasswordEncoder passwordEncoder;
@@ -53,7 +50,7 @@ public class AuthController {
     @Operation(
             summary = "Enables user log in - Users can user either phone number or email address"
     )
-    @PostMapping("/signin")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -84,24 +81,21 @@ public class AuthController {
 
         User user = new User(registerRequest.getFirstName(), registerRequest.getLastName(),
                 registerRequest.getDateOfBirth(), registerRequest.getEmail(),
-                registerRequest.getPhoneNumber(), registerRequest.getGender(),
-                registerRequest.getPassword());
+                registerRequest.getPhoneNumber(), registerRequest.getGender());
+        System.out.println(user);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
-
-        RoleName userRole = getRoleFromRequest(registerRequest.getRoleName());
-        Role role = roleRepository.findByName(userRole);
+        Role role = roleRepository.findByName(registerRequest.getRoleName());
         user.setRoles(Collections.singleton(role));
 
-        DepartmentName departmentName = getDepartmentFromRequest(registerRequest.getDepartment());
-        Department department = departmentRepository.findByDepartmentName(departmentName);
-        user.setDepartment(Collections.singleton(department));
+        Department department = departmentRepository.findByName(registerRequest.getDepartment());
+        user.setDepartments(Collections.singleton(department));
 
-        BranchChurchName branchChurchName = getBranchChurchFromRequest(registerRequest.getBranchChurch());
-        BranchChurch branchChurch = branchChurchRepository.findByBranchName(branchChurchName);
+        BranchChurch branchChurch = branchChurchRepository.findByName(registerRequest.getBranchChurch());
         user.setBranchChurch(Collections.singleton(branchChurch));
 
         User savedUser = userRepository.save(user);
+        System.out.println(savedUser);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/v1/users/{email}")
@@ -109,48 +103,7 @@ public class AuthController {
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 
-    private BranchChurchName getBranchChurchFromRequest(String branchChurch) {
-        return switch (branchChurch) {
-            case "FO1" -> BranchChurchName.FO1;
-            case "ARAB_ROAD" -> BranchChurchName.ARAB_ROAD;
-            case "FCDA" -> BranchChurchName.FCDA;
-            case "DUTSE_ARMY_SCHEME" -> BranchChurchName.DUTSE_ARMY_SCHEME;
-            case "GBAZANGO" -> BranchChurchName.GBAZANGO;
-            case "PHASE_4" -> BranchChurchName.PHASE_4;
-            default -> throw new IllegalArgumentException("Invalid branch church name: " + branchChurch);
-        };
-    }
 
-    private DepartmentName getDepartmentFromRequest(String department) {
-        return switch (department) {
-            case "ADMIN" -> DepartmentName.ADMIN;
-            case "CHOIR" -> DepartmentName.CHOIR;
-            case "GREETERS" -> DepartmentName.GREETERS;
-            case "FACILITY_MANAGEMENT" -> DepartmentName.FACILITY_MANAGEMENT;
-            case "INTERCESSORY" -> DepartmentName.INTERCESSORY;
-            case "KINGS_KIDS" -> DepartmentName.KINGS_KIDS;
-            case "MEDIA" -> DepartmentName.MEDIA;
-            case "MOBILIZATION" -> DepartmentName.MOBILIZATION;
-            case "MVPS" -> DepartmentName.MVPS;
-            case "PROTOCOL" -> DepartmentName.PROTOCOL;
-            case "USHERING" -> DepartmentName.USHERING;
-            case "SANCTUARY" -> DepartmentName.SANCTUARY;
-            case "TECHNICAL" -> DepartmentName.TECHNICAL;
-
-            default -> throw new IllegalArgumentException("Invalid department name: " + department);
-        };
-    }
-
-    private RoleName getRoleFromRequest(String roleName) {
-        return switch (roleName) {
-            case "ROLE_MEMBER" -> RoleName.ROLE_MEMBER;
-            case "ROLE_WORKER" -> RoleName.ROLE_WORKER;
-            case "ROLE_CELL_LEADER" -> RoleName.ROLE_CELL_LEADER;
-            case "ROLE_PASTOR" -> RoleName.ROLE_PASTOR;
-            case "ROLE_ADMIN__USER" -> RoleName.ROLE_ADMIN__USER;
-            default -> throw new IllegalArgumentException("Invalid role name: " + roleName);
-        };
-    }
 
 
 }

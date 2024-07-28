@@ -1,6 +1,7 @@
 package com.rowland.engineering.dck.service;
 
 import com.rowland.engineering.dck.dto.UpdateUserInformation;
+import com.rowland.engineering.dck.dto.UserDetailsResponse;
 import com.rowland.engineering.dck.model.User;
 import com.rowland.engineering.dck.security.CurrentUser;
 import com.rowland.engineering.dck.security.UserPrincipal;
@@ -11,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface IUserService {
-    List<User> getAllUsers();
+    List<UserDetailsResponse> getAllUsers();
     Optional<User> findUserById(UUID id);
 
     ResponseEntity<String> updateUserInformation(UpdateUserInformation updateUserInformation, UserPrincipal currentUser);

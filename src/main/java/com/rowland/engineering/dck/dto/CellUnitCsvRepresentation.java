@@ -2,10 +2,7 @@ package com.rowland.engineering.dck.dto;
 
 import com.opencsv.bean.CsvBindByName;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -13,7 +10,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CellUnitCsvRepresentation {
+
     @CsvBindByName(column = "id")
     private UUID cellId;
     @CsvBindByName(column = "name")
@@ -24,9 +23,9 @@ public class CellUnitCsvRepresentation {
     private String cellLatitude;
 
 
-    @CsvBindByName(column = "leaderId")
+    @CsvBindByName(column = "leader_id")
     private UUID cellLeaderId;
-    @CsvBindByName(column = "leadersPhoneNumber")
+    @CsvBindByName(column = "leaders_phone_number")
     private String cellLeadersPhoneNumber;
     @CsvBindByName(column = "address")
     private String cellAddress;

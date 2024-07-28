@@ -1,6 +1,7 @@
 package com.rowland.engineering.dck.service;
 
 import com.rowland.engineering.dck.dto.UpdateUserInformation;
+import com.rowland.engineering.dck.dto.UserDetailsResponse;
 import com.rowland.engineering.dck.exception.EntityNotFoundException;
 import com.rowland.engineering.dck.exception.UserNotFoundException;
 import com.rowland.engineering.dck.model.CellUnit;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +30,26 @@ public class UserService implements IUserService{
     private final CellUnitRepository cellUnitRepository;
 
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDetailsResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> {
+            UserDetailsResponse userDetailsResponse = new UserDetailsResponse();
+            userDetailsResponse.setId(user.getId());
+            userDetailsResponse.setEmail(user.getEmail());
+            userDetailsResponse.setFirstName(user.getFirstName());
+            userDetailsResponse.setLastName(user.getLastName());
+            userDetailsResponse.setPhoneNumber(user.getPhoneNumber());
+            userDetailsResponse.setCellLeader(user.isCellLeader());
+            userDetailsResponse.setGender(user.getGender());
+            userDetailsResponse.setDepartments(user.getDepartments());
+            userDetailsResponse.setBranchChurch(user.getBranchChurch());
+            userDetailsResponse.setDateOfBirth(user.getDateOfBirth());
+            userDetailsResponse.setFavouriteBiblePassage(user.getFavouriteBiblePassage());
+            userDetailsResponse.setCellUnitId(user.getCellUnitId());
+            userDetailsResponse.setRoles(user.getRoles());
+            return userDetailsResponse;
+        }).collect(Collectors.toList());
+
     }
 
 

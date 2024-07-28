@@ -8,7 +8,6 @@ import java.util.UUID;
 
 
 public interface BranchChurchRepository extends JpaRepository<BranchChurch, UUID> {
-    Optional<BranchChurch> findByBranchName(String branchChurch);
-    BranchChurch findByBranchName(BranchChurchName roleName);
+    BranchChurch findByName(String branchChurch);
 
 }

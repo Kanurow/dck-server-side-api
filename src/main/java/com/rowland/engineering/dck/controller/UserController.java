@@ -1,6 +1,7 @@
 package com.rowland.engineering.dck.controller;
 
 import com.rowland.engineering.dck.dto.UpdateUserInformation;
+import com.rowland.engineering.dck.dto.UserDetailsResponse;
 import com.rowland.engineering.dck.dto.UserSummary;
 import com.rowland.engineering.dck.model.User;
 import com.rowland.engineering.dck.security.CurrentUser;
@@ -51,7 +52,7 @@ public class UserController {
             summary = "Returns all registered users - must be logged in as admin"
     )
     @GetMapping("/all-users")
-    public List<User> getUsers(){
+    public List<UserDetailsResponse> getUsers(){
         return userService.getAllUsers();
     }
 

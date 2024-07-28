@@ -24,7 +24,7 @@ public class BranchChurchController {
             description = "Returns list of all dck branch satellite churches",
             summary = "Returns all satellite churches"
     )
-    @GetMapping("/all-branch")
+    @GetMapping("/all-branches")
     public List<BranchChurch> getAllChurchBranch() {
         return branchChurchService.getAllChurchBranch();
     }

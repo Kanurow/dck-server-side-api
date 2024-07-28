@@ -38,7 +38,9 @@ public class CellUnit {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> members = new HashSet<>();
 
+    @Column(name = "leader_id")
     private UUID leaderId;
+    @Column(name = "leaders_phone_number")
     private String leadersPhoneNumber;
     private String address;
 

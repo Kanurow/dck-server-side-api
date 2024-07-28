@@ -5,6 +5,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.rowland.engineering.dck.dto.CellUnitCsvRepresentation;
 import com.rowland.engineering.dck.dto.CreateCellUnitRequest;
+import com.rowland.engineering.dck.dto.GetAllCellUnitsResponse;
+import com.rowland.engineering.dck.dto.UserSummary;
 import com.rowland.engineering.dck.exception.EntityNotFoundException;
 import com.rowland.engineering.dck.model.CellUnit;
 import com.rowland.engineering.dck.model.User;
@@ -37,8 +39,30 @@ public class CellUnitService implements ICellUnitService {
     private int MAX_CELL_MEMBERS;
 
     @Override
-    public List<CellUnit> getAllCellUnits() {
-        return cellUnitRepository.findAll();
+    public List<GetAllCellUnitsResponse> getAllCellUnits() {
+        List<CellUnit> cellUnits = cellUnitRepository.findAll();
+        return cellUnits.stream().map(cellUnit -> {
+            GetAllCellUnitsResponse cellUnitsResponse = new GetAllCellUnitsResponse();
+            cellUnitsResponse.setId(cellUnit.getId());
+            cellUnitsResponse.setName(cellUnit.getName());
+            cellUnitsResponse.setAddress(cellUnit.getAddress());
+            cellUnitsResponse.setLeaderId(cellUnit.getLeaderId());
+            cellUnitsResponse.setLatitude(cellUnit.getLatitude());
+            cellUnitsResponse.setLongitude(cellUnit.getLongitude());
+            cellUnitsResponse.setLeadersPhoneNumber(cellUnit.getLeadersPhoneNumber());
+            cellUnitsResponse.setMembers(cellUnit.getMembers().stream().map(
+                    member -> {
+                        UserSummary userSummary = new UserSummary();
+                        userSummary.setEmail(member.getEmail());
+                        userSummary.setFirstName(member.getFirstName());
+                        userSummary.setLastName(member.getLastName());
+                        userSummary.setPhoneNumber(member.getPhoneNumber());
+                        return userSummary;
+                    }
+            ).collect(Collectors.toSet()));
+            return cellUnitsResponse;
+        }).collect(Collectors.toList());
+
     }
 
     @Transactional

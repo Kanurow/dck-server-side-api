@@ -8,10 +8,7 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -71,29 +68,36 @@ public class User extends DateAudit {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "church_branch",
+    @JoinTable(name = "branch_churches",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "branch_church_id"))
-    @Column(name = "branchChurch")
     private Set<BranchChurch> branchChurch = new HashSet<>();
+
+//    @ManyToMany(fetch = FetchType.EAGER,
+//            cascade = {CascadeType.PERSIST,
+//                    CascadeType.MERGE, CascadeType.DETACH})
+//    @JoinTable(name = "user_branch_church",
+//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "branch_church_id", referencedColumnName = "id"))
+//    private Collection<BranchChurch> branchChurches = new HashSet<>();
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "department",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "department_id"))
-    private Set<Department> department = new HashSet<>();
+    private Set<Department> departments = new HashSet<>();
 
     private UUID cellUnitId;
 
     public User(String firstName, String lastName, LocalDate dateOfBirth,
-                String email, String phoneNumber, Gender gender, String password) {
+                String email, String phoneNumber, Gender gender) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
-        this.password = password;
     }
 
     @Override
