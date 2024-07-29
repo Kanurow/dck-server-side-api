@@ -18,6 +18,7 @@ import java.util.UUID;
 
 
 import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 
 @RestController
@@ -32,7 +33,7 @@ public class RoleController {
     )
     @GetMapping("/reg-roles")
     public ResponseEntity<List<RoleResponse>> getRegRoles(){
-        return new ResponseEntity<>(roleService.getRoles(), FOUND);
+        return new ResponseEntity<>(roleService.getRoles(), OK);
     }
 
 
@@ -58,7 +59,7 @@ public class RoleController {
     )
     @GetMapping("/all-roles")
     public ResponseEntity<List<Role>> getAllRoles(){
-        return new ResponseEntity<>(roleService.getAllRoles(), FOUND);
+        return new ResponseEntity<>(roleService.getAllRoles(), OK);
     }
 
     @DeleteMapping("/delete/{roleId}")
