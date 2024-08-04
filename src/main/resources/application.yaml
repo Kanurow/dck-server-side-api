@@ -43,7 +43,7 @@ spring:
     show-sql: true
   datasource:
 #    url: jdbc:postgresql://dpg-cqainueehbks73b23dj0-a/dck_8hua
-    url: postgresql://dck_8hua_user:OJqyFaZQZbImQVzAVOZkX3WVvt2ZHS5t@dpg-cqainueehbks73b23dj0-a/dck_8hua
+    url: jdbc:postgresql://dck_8hua_user:OJqyFaZQZbImQVzAVOZkX3WVvt2ZHS5t@dpg-cqainueehbks73b23dj0-a/dck_8hua
     username: dck_8hua_user
     password: OJqyFaZQZbImQVzAVOZkX3WVvt2ZHS5t
 
