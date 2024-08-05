@@ -42,10 +42,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
   datasource:
-    url: jdbc:postgresql://dpg-cqainueehbks73b23dj0-a.oregon-postgres.render.com/dck_8hua
+    url: jdbc:postgresql://dpg-cqainueehbks73b23dj0-a/dck_8hua
     username: dck_8hua_user
     password: OJqyFaZQZbImQVzAVOZkX3WVvt2ZHS5t
     driverClassName: org.postgresql.Driver
