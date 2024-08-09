@@ -39,6 +39,18 @@ spring:
   application:
     name: dck
 
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://dpg-cqainueehbks73b23dj0-a/dck_8hua
+    username: dck_8hua_user
+    password: OJqyFaZQZbImQVzAVOZkX3WVvt2ZHS5t
+    driverClassName: org.postgresql.Driver
+
 management:
   endpoints:
     web:
