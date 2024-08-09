@@ -7,8 +7,8 @@ import java.util.UUID;
 @Data
 public class CreateCellUnitRequest {
     private String cellName;
-    private String cellLongitude;
-    private String cellLatitude;
+    private int cellLongitude;
+    private int cellLatitude;
     private UUID cellLeaderId;
     private String cellAddress;
 }

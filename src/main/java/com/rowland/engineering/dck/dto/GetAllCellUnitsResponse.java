@@ -24,8 +24,8 @@ public class GetAllCellUnitsResponse {
     private UUID id;
     private String name;
 
-    private String longitude;
-    private String latitude;
+    private int longitude;
+    private int latitude;
 
     private Set<UserSummary> members = new HashSet<>();
 

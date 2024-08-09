@@ -2,6 +2,7 @@ package com.rowland.engineering.dck.controller;
 
 
 import com.rowland.engineering.dck.dto.ApiResponse;
+import com.rowland.engineering.dck.dto.CreateRoleRequest;
 import com.rowland.engineering.dck.dto.RoleResponse;
 import com.rowland.engineering.dck.exception.RoleAlreadyExistException;
 import com.rowland.engineering.dck.model.Role;
@@ -11,6 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,16 +44,16 @@ public class RoleController {
             summary = "Gets all roles"
     )
     @PostMapping("/create-new-role")
-    public ResponseEntity<String> createRole(@RequestBody Role theRole){
+    @Secured({"PASTOR", "ADMIN"})
+    public ResponseEntity<String> createRole(@RequestBody CreateRoleRequest role){
         try{
-            roleService.createRole(theRole);
+            roleService.createRole(role);
             return ResponseEntity.ok("New role created successfully!");
         }catch(RoleAlreadyExistException re){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(re.getMessage());
 
         }
     }
-
 
     @Operation(
             description = "Gets roles for user registration",
@@ -61,7 +64,12 @@ public class RoleController {
         return new ResponseEntity<>(roleService.getAllRoles(), OK);
     }
 
+    @Operation(
+            description = "Deletes role",
+            summary = "Deletes role and removes users having the role authorization from the role"
+    )
     @DeleteMapping("/delete/{roleId}")
+    @Secured({"PASTOR", "ADMIN"})
     public ResponseEntity<ApiResponse> deleteRole(@PathVariable("roleId") UUID roleId){
         roleService.deleteRole(roleId);
         return new  ResponseEntity<>(new ApiResponse(true, "Success! Role deleted."),
@@ -70,6 +78,7 @@ public class RoleController {
 
 
 
+    @Secured({"PASTOR", "ADMIN"})
     @DeleteMapping("/remove-user-from-role")
     public ResponseEntity<?> removeUserFromRole(
             @RequestParam("userId") UUID userId,
@@ -77,6 +86,7 @@ public class RoleController {
         return roleService.removeUserFromRole(userId, roleId);
     }
 
+    @Secured({"PASTOR", "ADMIN"})
     @PostMapping("/assign-user-to-role")
     public User assignUserToRole(
             @RequestParam("userId") UUID userId,

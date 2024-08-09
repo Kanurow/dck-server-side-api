@@ -18,9 +18,9 @@ public class CellUnitCsvRepresentation {
     @CsvBindByName(column = "name")
     private String cellName;
     @CsvBindByName(column = "longitude")
-    private String cellLongitude;
+    private int cellLongitude;
     @CsvBindByName(column = "latitude")
-    private String cellLatitude;
+    private int cellLatitude;
 
 
     @CsvBindByName(column = "leader_id")

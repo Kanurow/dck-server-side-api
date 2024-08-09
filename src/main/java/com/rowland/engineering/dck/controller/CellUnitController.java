@@ -2,7 +2,6 @@ package com.rowland.engineering.dck.controller;
 
 import com.rowland.engineering.dck.dto.CreateCellUnitRequest;
 import com.rowland.engineering.dck.dto.GetAllCellUnitsResponse;
-import com.rowland.engineering.dck.model.CellUnit;
 import com.rowland.engineering.dck.service.ICellUnitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,8 +25,6 @@ public class CellUnitController {
 
     @Autowired
     private final ICellUnitService cellService;
-
-
 
     @Operation(
             description = "Returns list of all cell units",
@@ -95,6 +92,5 @@ public class CellUnitController {
     ) throws IOException {
        return ResponseEntity.ok(cellService.uploadCellUnitCoOrdinates(file));
     }
-
 
 }

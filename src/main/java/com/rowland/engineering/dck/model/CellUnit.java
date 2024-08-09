@@ -29,8 +29,8 @@ public class CellUnit {
     @NotBlank
     private String name;
 
-    private String longitude;
-    private String latitude;
+    private int longitude;
+    private int latitude;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "cell_units_table",

@@ -78,11 +78,14 @@ public class AuthController {
             return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
+        if(!registerRequest.getRoleName().equals("MEMBER") && !registerRequest.getRoleName().equals("WORKER")) {
+            return new ResponseEntity<>(new ApiResponse(false, "Please register as a member or worker"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
         User user = new User(registerRequest.getFirstName(), registerRequest.getLastName(),
                 registerRequest.getDateOfBirth(), registerRequest.getEmail(),
                 registerRequest.getPhoneNumber(), registerRequest.getGender());
-        System.out.println(user);
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
         Role role = roleRepository.findByName(registerRequest.getRoleName());
@@ -102,8 +105,5 @@ public class AuthController {
                 .buildAndExpand(savedUser.getEmail()).toUri();
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
-
-
-
 
 }

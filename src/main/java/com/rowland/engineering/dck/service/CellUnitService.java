@@ -7,7 +7,8 @@ import com.rowland.engineering.dck.dto.CellUnitCsvRepresentation;
 import com.rowland.engineering.dck.dto.CreateCellUnitRequest;
 import com.rowland.engineering.dck.dto.GetAllCellUnitsResponse;
 import com.rowland.engineering.dck.dto.UserSummary;
-import com.rowland.engineering.dck.exception.EntityNotFoundException;
+import com.rowland.engineering.dck.exception.CellUnitNotFoundException;
+import com.rowland.engineering.dck.exception.UserNotFoundException;
 import com.rowland.engineering.dck.model.CellUnit;
 import com.rowland.engineering.dck.model.User;
 import com.rowland.engineering.dck.repository.CellUnitRepository;
@@ -68,8 +69,8 @@ public class CellUnitService implements ICellUnitService {
     @Transactional
     @Override
     public void addCellMember(UUID cellUnitId, UUID userId) {
-        CellUnit cellUnit = cellUnitRepository.findById(cellUnitId).orElseThrow(() -> new EntityNotFoundException("CellUnit not found"));
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        CellUnit cellUnit = cellUnitRepository.findById(cellUnitId).orElseThrow(() -> new CellUnitNotFoundException("CellUnit not found! cellId = "+ cellUnitId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found! userId = "+userId));
         if (cellUnit.getMembers().size() >= MAX_CELL_MEMBERS) {
             throw new IllegalStateException("Cell unit is full! 30 maximum members in a cell.");
         }
@@ -77,14 +78,14 @@ public class CellUnitService implements ICellUnitService {
         user.setCellUnitId(cellUnit.getId());
         userRepository.save(user);
         cellUnitRepository.save(cellUnit);
-
     }
+    @Transactional
     @Override
     public void removeCellMember(UUID cellUnitId, UUID userId) {
         CellUnit cellUnit = cellUnitRepository.findById(cellUnitId)
-                .orElseThrow(() -> new EntityNotFoundException("CellUnit not found"));
+                .orElseThrow(() -> new CellUnitNotFoundException("CellUnit not found"));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         boolean removed = cellUnit.getMembers().remove(user);
         if (!removed) {
@@ -100,7 +101,7 @@ public class CellUnitService implements ICellUnitService {
     @Transactional
     public void createCellUnit(CreateCellUnitRequest cellUnitDto) {
         User cellLeader = userRepository.findById(cellUnitDto.getCellLeaderId())
-                .orElseThrow(() -> new EntityNotFoundException("Cell leader not found"));
+                .orElseThrow(() -> new UserNotFoundException("Cell leader not found"));
 
         CellUnit cellUnit = CellUnit.builder()
                 .name(cellUnitDto.getCellName())

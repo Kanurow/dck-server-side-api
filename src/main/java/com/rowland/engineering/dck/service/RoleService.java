@@ -2,6 +2,7 @@ package com.rowland.engineering.dck.service;
 
 
 import com.rowland.engineering.dck.dto.ApiResponse;
+import com.rowland.engineering.dck.dto.CreateRoleRequest;
 import com.rowland.engineering.dck.dto.RoleResponse;
 import com.rowland.engineering.dck.exception.RoleAlreadyExistException;
 import com.rowland.engineering.dck.exception.UserAlreadyExistsException;
@@ -9,7 +10,6 @@ import com.rowland.engineering.dck.model.Role;
 import com.rowland.engineering.dck.model.User;
 import com.rowland.engineering.dck.repository.RoleRepository;
 import com.rowland.engineering.dck.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +35,6 @@ public class RoleService implements IRoleService {
         List<Role> roleList = roleRepository.findAll();
 
         System.out.println(roleList);
-//        return roleList.stream().map(role -> {
-//            RoleResponse response = new RoleResponse();
-//            response.setId(role.getId());
-//            response.setRoleName(role.getName());
-//            return response;
-//        }).collect(Collectors.toList());
 
          return roleList.stream()
                 .filter(role -> Objects.equals(role.getName(), "MEMBER") || role.getName().equals("WORKER"))
@@ -50,13 +44,13 @@ public class RoleService implements IRoleService {
 
 
     @Override
-    public Role createRole(Role theRole) {
+    public void createRole(CreateRoleRequest theRole) {
         String roleName = theRole.getName().toUpperCase();
         Role role = new Role(theRole.getName().toUpperCase());
         if (roleRepository.existsByName(roleName)){
             throw new RoleAlreadyExistException(theRole.getName()+" role already exists");
         }
-        return roleRepository.save(role);
+        roleRepository.save(role);
     }
 
     @Override
@@ -98,7 +92,7 @@ public class RoleService implements IRoleService {
         Optional<Role>  role = roleRepository.findById(roleId);
         if (user.isPresent() && user.get().getRoles().contains(role.get())){
             throw new UserAlreadyExistsException(
-                    user.get().getFirstName()+ " is already assigned to the" + role.get().getName()+ " role");
+                    user.get().getFirstName()+ " is already a " + role.get().getName());
         }
         if (role.isPresent()){
             role.get().assignRoleToUser(user.get());
