@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @Operation(
-            summary = "Gets summary data of actively logged in user"
+            summary = "Gets data of actively logged in user"
     )
     @GetMapping("/user/my-profile")
     public UserProfileInfo getCurrentUserProfileInfo(@Valid  @CurrentUser UserPrincipal currentUser) {
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @Operation(
-            description = "Updates registered users information",
+            description = "Updates registered users information - Must be the current logged in user",
             summary = "Enables user update profile information"
     )
     @PatchMapping("/update-user-information")
@@ -80,8 +80,8 @@ public class UserController {
 
 
     @Operation(
-            description = "Gives the role of a cell leader",
-            summary = "Gives the role of a cell leader - must be logged in as admin or pastor"
+            description = "Gives the role of a cell leader - must be logged in as admin or pastor",
+            summary = "Gives the role of a cell leader"
     )
     @PatchMapping("/make-cell-leader/{userId}/{cellUnitId}")
     @Secured({"PASTOR", "ADMIN"})

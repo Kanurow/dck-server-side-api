@@ -40,8 +40,8 @@ public class RoleController {
 
 
     @Operation(
-            description = "Creates a new role",
-            summary = "Gets all roles"
+            description = "Creates a new role - Must be logged in as an admin or pastor",
+            summary = "Creates a new role"
     )
     @PostMapping("/create-new-role")
     @Secured({"PASTOR", "ADMIN"})
@@ -56,16 +56,17 @@ public class RoleController {
     }
 
     @Operation(
-            description = "Gets roles for user registration",
-            summary = "Gets registration roles"
+            description = "Gets all role - must be logged in as admin or pastor",
+            summary = "Gets all roles"
     )
     @GetMapping("/all-roles")
+    @Secured({"PASTOR", "ADMIN"})
     public ResponseEntity<List<Role>> getAllRoles(){
         return new ResponseEntity<>(roleService.getAllRoles(), OK);
     }
 
     @Operation(
-            description = "Deletes role",
+            description = "Deletes role - Must be logged in as an admin or pastor.",
             summary = "Deletes role and removes users having the role authorization from the role"
     )
     @DeleteMapping("/delete/{roleId}")
@@ -78,6 +79,10 @@ public class RoleController {
 
 
 
+    @Operation(
+            description = "Removes user from role - Must be logged in as an admin or pastor.",
+            summary = "Removes a user from role"
+    )
     @Secured({"PASTOR", "ADMIN"})
     @DeleteMapping("/remove-user-from-role")
     public ResponseEntity<?> removeUserFromRole(
@@ -86,6 +91,10 @@ public class RoleController {
         return roleService.removeUserFromRole(userId, roleId);
     }
 
+    @Operation(
+            description = "Assigns role to a user - Must be logged in as an admin or pastor.",
+            summary = "Assigns role to a user"
+    )
     @Secured({"PASTOR", "ADMIN"})
     @PostMapping("/assign-user-to-role")
     public User assignUserToRole(
