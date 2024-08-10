@@ -44,7 +44,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
   datasource:
     url: jdbc:postgresql://dpg-cqainueehbks73b23dj0-a/dck_8hua
     username: dck_8hua_user
